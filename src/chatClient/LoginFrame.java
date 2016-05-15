@@ -107,7 +107,7 @@ public class LoginFrame extends JFrame{
 					JOptionPane.showMessageDialog(LoginFrame.this, "数据库错误！");
 					return;
 				case Code.SUCCESS:
-					ClientFrame clientFrame = new ClientFrame(text_username.getText(), (int) message.get("userID"));
+					ClientFrame clientFrame = new ClientFrame(text_username.getText(), message);
 					LoginFrame.this.dispose();
 				}
 			}

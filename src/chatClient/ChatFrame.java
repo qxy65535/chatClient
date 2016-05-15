@@ -73,10 +73,19 @@ public class ChatFrame extends JFrame implements Runnable{
 		setVisible(true);
 	}
 	
-	private void displayMessage(String message){
+	public void displayMessage(String message){
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
 				chatLogger.append(message);
+			}
+		});
+	}
+	
+	public void displayMessage(Map<String, Object> message){
+		String m = ">>> " + chatTo + " " + message.get("time") + "\n  " + message.get("message") + "\n";
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				chatLogger.append(m);
 			}
 		});
 	}
