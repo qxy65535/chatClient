@@ -15,30 +15,42 @@ import javax.swing.SwingUtilities;
 
 public class ClientFrame extends JFrame implements Runnable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 247267039795100225L;
 	private String username;
 	private int userID;
 //	private JButton button1 = new JButton("qxy");	
 //	private JButton button2 = new JButton("admin");	
 	
 	private JButton[] buttons;
-	private ExecutorService chatRoom;
-	private Map<String, Object> chatToList;
+//	private ExecutorService chatRoom;
+	private Map<Integer, Object> chatToList;
+	private Map<String, Integer> nameToID;
 	private Map<String, Object> message;
 	
 	public ClientFrame(String username, Map<String, Object> message){
 		super(username);
 		this.username = username;
-		this.userID = (int) message.get("userID");
-		chatToList = new HashMap<String, Object>();
+		this.userID = (Integer) message.get("userID");
+		ChatLog.initUser(username, userID);
 		
-		if (message.get("clients") != null){
-			ArrayList<String> clients = (ArrayList<String>) message.get("clients");
-			buttons = new JButton[clients.size()];
+		chatToList = new HashMap<Integer, Object>();
+		nameToID = new HashMap<String, Integer>();
+		
+		if (message.get("friendID") != null){
+			ArrayList<Integer> friendID = (ArrayList<Integer>) message.get("friendID");
+			System.out.println(message.get("friendID"));
+			ArrayList<String> friendName = (ArrayList<String>) message.get("friendName");
+			buttons = new JButton[friendID.size()];
 			ButtonListener listener = new ButtonListener();
 			
-			for (int i = 0; i < clients.size(); ++i){
-				chatToList.put(clients.get(i), new ChatLog(clients.get(i)));
-				buttons[i] = new JButton(clients.get(i));
+			for (int i = 0; i < friendID.size(); ++i){
+				chatToList.put(friendID.get(i), new ChatLog(friendID.get(i), friendName.get(i)));
+				nameToID.put(friendName.get(i), friendID.get(i));
+				
+				buttons[i] = new JButton(friendName.get(i));
 				buttons[i].addActionListener(listener);
 				add(buttons[i]);
 			}
@@ -94,10 +106,11 @@ public class ClientFrame extends JFrame implements Runnable{
 		}
 	}
 	
-	private void openChatFrame(String chatTo){
+	private void openChatFrame(final String chatToName){
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
-				((ChatLog) chatToList.get(chatTo)).openChatFrame(username, userID, chatTo);
+				int id = nameToID.get(chatToName);
+				((ChatLog) chatToList.get(id)).openChatFrame();
 			}
 		});
 	}
@@ -106,14 +119,15 @@ public class ClientFrame extends JFrame implements Runnable{
 		while (true){
 			System.out.println("1.!#23213");
 			message = Message.receivePacket();
-			String chatTo = (String) message.get("from");
-			System.out.println(chatTo);
-			if (chatToList.get(chatTo) == null){
+			int chatToID = (Integer) message.get("fromID");
+			String chatToUsername = (String) message.get("fromUsername");
+			System.out.println(chatToID);
+			if (chatToList.get(chatToID) == null){
 				System.out.println("0.!#23213");
-				chatToList.put(chatTo, new ChatLog(chatTo));
+				chatToList.put(chatToID, new ChatLog(chatToID, chatToUsername));
 			}
 			
-			ChatLog chatLog = (ChatLog) chatToList.get(chatTo);
+			ChatLog chatLog = (ChatLog) chatToList.get(chatToID);
 			if (chatLog.isChatFrameOpen()){
 				System.out.println("2.!#23213");
 				chatLog.getChatFrame().displayMessage(message);
