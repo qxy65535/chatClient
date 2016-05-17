@@ -149,14 +149,15 @@ public class LoginFrame extends JFrame{
 			else if (event.getSource() == signUp)
 				userInfo.put("type", "signUp");
 			
-			Message.sendPacket(userInfo);
-			Map<String, Object> message = Message.receiveResponsePacket();
+			//Message.sendPacket(userInfo);
+			//Map<String, Object> message = Message.receiveResponsePacket();
+			Map<String, Object> message = Message.login(userInfo);
 			switch((Integer) message.get("messageCode")){
 			case Code.USER_INFO_ERROR:
 				JOptionPane.showMessageDialog(LoginFrame.this, "用户名或密码错误！");
 				return;
 			case Code.DUP_USERNAME:
-				JOptionPane.showMessageDialog(LoginFrame.this, "用户名已存在！！");
+				JOptionPane.showMessageDialog(LoginFrame.this, "用户名已存在！");
 				return;
 			case Code.SQL_EXCEPTION:
 				JOptionPane.showMessageDialog(LoginFrame.this, "数据库错误！");

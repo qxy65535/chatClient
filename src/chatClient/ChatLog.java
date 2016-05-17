@@ -3,18 +3,20 @@ package chatClient;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -96,12 +98,13 @@ public class ChatLog {
 			
 			chatLogger = new JTextArea();
 			chatLogger.setEditable(false);
+			chatLogger.setLineWrap(true);
 			inputArea = new JTextField();
 			send = new JButton("send");	
 			
 			JPanel logPanel = new JPanel();
 			logPanel.setLayout(new BorderLayout());
-			logPanel.add(chatLogger, BorderLayout.CENTER);
+			logPanel.add(new JScrollPane(chatLogger), BorderLayout.CENTER);
 			
 			JPanel inputPanel = new JPanel();
 			inputPanel.setLayout(new BorderLayout());
@@ -115,6 +118,14 @@ public class ChatLog {
 				public void actionPerformed(ActionEvent event){
 					sendMessage();
 				}
+			});
+			
+			inputArea.addKeyListener(new KeyAdapter(){
+				 public void keyPressed(KeyEvent event){ 
+					 if (event.getKeyCode() == KeyEvent.VK_ENTER){ 
+						 send.doClick();
+					 }
+				 }
 			});
 			
 			setVisible(true);
