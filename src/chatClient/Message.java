@@ -119,7 +119,7 @@ public class Message {
 	public static void sendPacket(Map<String, Object> message){
 		try{
 			byte[] data = convertToByte(message);
-			DatagramPacket sendPacket = new DatagramPacket(data, data.length, InetAddress.getByName(host), 12345);
+			DatagramPacket sendPacket = new DatagramPacket(data, data.length, InetAddress.getByName(host), 54321);
 			//System.out.println(socket.getPort());
 			//System.out.println(sendPacket.getPort());
 			socket.send(sendPacket);
