@@ -55,8 +55,8 @@ public class ChatLog {
 		return chatFrame;
 	}
 	
-	public void openChatFrame(/*String username, int userID, String chatTo*/){
-		chatFrame = new ChatFrame(/*username, userID, chatTo*/);
+	public void openChatFrame(){
+		chatFrame = new ChatFrame();
 		isChatFrameOpen = true;
 		
 		//System.out.println("4.!#23213    " + chatLog.size());
@@ -81,17 +81,8 @@ public class ChatLog {
 		private JTextField inputArea;
 		private JButton send;
 		
-//		private String username;
-//		private int userID;
-//		private String chatTo;
-		
-		public ChatFrame(/*String username, int userID, String chatTo*/){
+		public ChatFrame(){
 			super(chatToName);
-//			
-//			this.username = username;
-//			this.userID = userID;
-//			this.chatTo = chatTo;
-			
 			setSize(500, 450);
 			//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setLayout(new BorderLayout());
@@ -171,14 +162,7 @@ public class ChatLog {
 			DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			return format.format(date);
 		}
-		
-//		public void run(){
-//			while (true){
-//				Map<String, Object> message = Message.receivePacket();
-//				
-//				displayMessage(">>> " + chatTo + " " + message.get("time") + "\n  " + message.get("message") + "\n");
-//			}
-//		}
+
 	    protected void processWindowEvent(WindowEvent event) {  
 	        if (event.getID() == WindowEvent.WINDOW_CLOSING){
 	        	System.out.println("click close");

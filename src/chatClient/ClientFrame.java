@@ -69,59 +69,7 @@ public class ClientFrame extends JFrame implements Runnable{
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initViews(message);
-		
-//		if (message.get("friendID") != null){
-//			ArrayList<Integer> friendID = (ArrayList<Integer>) message.get("friendID");
-//			System.out.println(message.get("friendID"));
-//			ArrayList<String> friendName = (ArrayList<String>) message.get("friendName");
-//			buttons = new JButton[friendID.size()];
-//			
-//			for (int i = 0; i < friendID.size(); ++i){
-//				chatToList.put(friendID.get(i), new ChatLog(friendID.get(i), friendName.get(i)));
-//				nameToID.put(friendName.get(i), friendID.get(i));
-//				
-//				buttons[i] = new JButton(friendName.get(i));
-//				buttons[i].addActionListener(listener);
-//				friendListArea.add(buttons[i]);
-//			}
-//		}
-		
-		//chatRoom = Executors.newCachedThreadPool();
-		
 
-//		add(button1);
-//		add(button2);
-//		
-//		button1.addActionListener(new ActionListener(){
-//			public void actionPerformed(ActionEvent event){
-//				
-//				openChatFrame(event.getActionCommand());
-////				ChatFrame chatFrame = new ChatFrame(username, userID, "qxy");
-////				chatRoom.execute(chatFrame);
-//				
-////				Map<String, Object> message = new HashMap<String, Object>();
-////				message.put("chatTo", "qxy");
-////				message.put("username", username);
-////				message.put("userID", "userID");
-////				Message.sendPacket(message);
-//				
-//			}
-//		});
-//		
-//		button2.addActionListener(new ActionListener(){
-//			public void actionPerformed(ActionEvent event){
-//				
-//				ChatFrame chatFrame = new ChatFrame(username, userID, "admin");
-//				chatRoom.execute(chatFrame);
-//				
-////				Map<String, Object> message = new HashMap<String, Object>();
-////				message.put("chatTo", "qxy");
-////				message.put("username", username);
-////				message.put("userID", "userID");
-////				Message.sendPacket(message);
-//				
-//			}
-//		});
 		
 		new Thread(this).start();
 		setVisible(true);
@@ -178,6 +126,9 @@ public class ClientFrame extends JFrame implements Runnable{
 				case Code.USER_INFO_ERROR:
 					JOptionPane.showMessageDialog(ClientFrame.this, "用户不存在！");
 					return;
+				case Code.DUP_USERNAME:
+					JOptionPane.showMessageDialog(ClientFrame.this, "该用户已是您的好友！");
+					return;
 				case Code.SQL_EXCEPTION:
 					JOptionPane.showMessageDialog(ClientFrame.this, "数据库错误！");
 					return;
@@ -185,18 +136,7 @@ public class ClientFrame extends JFrame implements Runnable{
 					JOptionPane.showMessageDialog(ClientFrame.this, "添加好友成功！");
 					addFriendText.setText("");
 					
-					DefaultMutableTreeNode frinode = null; 
-				    frinode = new DefaultMutableTreeNode(friendName);
-				    friends.add(frinode);
-				    
-//					JButton button = new JButton(friendName);
-//					String name = (String)responseMessage.get("username");
-					int id = (Integer) responseMessage.get("userID");
-					chatToList.put(id, new ChatLog(id, friendName));
-					nameToID.put(friendName, id);
-//					button.addActionListener(listener);
-//					friendListArea.add(button);
-					friendTree.updateUI();
+					insertNewChat(friends, friendName, (Integer) responseMessage.get("userID"));
 					return;
 				}
 			}
@@ -221,17 +161,14 @@ public class ClientFrame extends JFrame implements Runnable{
 			ArrayList<Integer> friendID = (ArrayList<Integer>) message.get("friendID");
 			System.out.println(message.get("friendID"));
 			ArrayList<String> friendName = (ArrayList<String>) message.get("friendName");
-			// = new JButton[friendID.size()];
-			
+
 			for (int i = 0; i < friendID.size(); ++i){
 				chatToList.put(friendID.get(i), new ChatLog(friendID.get(i), friendName.get(i)));
 				nameToID.put(friendName.get(i), friendID.get(i));
 				
 			    frinode = new DefaultMutableTreeNode(friendName.get(i));
 			    friends.add(frinode);
-//				buttons[i] = new JButton(friendName.get(i));
-//				buttons[i].addActionListener(listener);
-//				friendListArea.add(buttons[i]);
+
 			}
 		}
 	}
@@ -281,11 +218,6 @@ public class ClientFrame extends JFrame implements Runnable{
 		
 	}
 	
-//	private class ButtonListener implements ActionListener{
-//		public void actionPerformed(ActionEvent event){
-//			openChatFrame(event.getActionCommand());
-//		}
-//	}
 	
 	private void openChatFrame(final String chatToName){
 		SwingUtilities.invokeLater(new Runnable(){
@@ -354,17 +286,6 @@ public class ClientFrame extends JFrame implements Runnable{
 				insertNewChat(stranger, chatToUsername, chatToID);
 				
 				System.out.println(chatToList);				
-//				DefaultMutableTreeNode strangerNode; 
-//				strangerNode = new DefaultMutableTreeNode(chatToUsername);
-//			    strangerNode.add(strangerNode);
-			    
-//				JButton button = new JButton(friendName);
-//				String name = (String)responseMessage.get("username");
-
-
-//				button.addActionListener(listener);
-//				friendListArea.add(button);
-//				friendTree.updateUI();
 
 			}
 			

@@ -55,23 +55,7 @@ public class Message {
 		userInfo.put("port", port);
 		
 		return sendData(userInfo);
-//		Map<String, Object> message = new HashMap<String, Object>();
-//		
-//		//System.out.println("123");
-//		try {
-//			userInfo.put("port", port);
-//			sendData(userInfo);
-//			//System.out.println("456");
-//			message = (Map<String, Object>) input.readObject();
-//			//System.out.println("789");
-//			return message;
-//		}catch (IOException e){
-//			e.printStackTrace();
-//			message.put("messageCode", Code.UNKNOW_ERROR);
-//		}finally {
-//			return message;
-//		}
-//		
+
 	}
 	
 	public static void logout(){
