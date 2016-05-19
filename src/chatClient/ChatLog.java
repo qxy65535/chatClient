@@ -1,6 +1,7 @@
 package chatClient;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -87,11 +88,15 @@ public class ChatLog {
 			//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setLayout(new BorderLayout());
 			
+			Font font = new Font("宋体", Font.PLAIN, 20);
 			chatLogger = new JTextArea();
 			chatLogger.setEditable(false);
 			chatLogger.setLineWrap(true);
+			chatLogger.setFont(font);
 			inputArea = new JTextField();
+			inputArea.setFont(font);
 			send = new JButton("send");	
+			send.setFont(font);
 			
 			JPanel logPanel = new JPanel();
 			logPanel.setLayout(new BorderLayout());
@@ -119,6 +124,7 @@ public class ChatLog {
 				 }
 			});
 			
+			setLocationRelativeTo(null);
 			setVisible(true);
 		}
 		
@@ -134,8 +140,9 @@ public class ChatLog {
 			message.put("type", "message");
 			message.put("message", inputArea.getText());
 			
-			Message.sendPacket(message);
 			displayMessage("<<< Me " + getTime() + "\n  " + message.get("message") + "\n");
+			Message.sendPacket(message);
+			
 			
 			inputArea.setText("");
 		}
@@ -149,7 +156,7 @@ public class ChatLog {
 		}
 		
 		public void displayMessage(Map<String, Object> message){
-			final String m = ">>> " + chatToName + " " + message.get("time") + "\n  " + message.get("message") + "\n";
+			final String m = ">>> " + message.get("fromName") + " " + message.get("time") + "\n  " + message.get("message") + "\n";
 			SwingUtilities.invokeLater(new Runnable(){
 				public void run(){
 					chatLogger.append(m);

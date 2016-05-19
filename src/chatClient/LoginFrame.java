@@ -37,6 +37,7 @@ public class LoginFrame extends JFrame{
 		
 
 		initViews();
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 	
@@ -162,8 +163,12 @@ public class LoginFrame extends JFrame{
 			case Code.SQL_EXCEPTION:
 				JOptionPane.showMessageDialog(LoginFrame.this, "数据库错误！");
 				return;
+			case Code.FIAL_TO_CONNECT:
+				JOptionPane.showMessageDialog(LoginFrame.this, "与服务器连接失败！");
+				return;
 			case Code.UNKNOW_ERROR:
 				JOptionPane.showMessageDialog(LoginFrame.this, "未知错误！");
+				return;
 			case Code.SUCCESS:
 				ClientFrame clientFrame = new ClientFrame(text_username.getText(), message);
 				LoginFrame.this.dispose();

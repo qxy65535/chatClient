@@ -6,11 +6,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ConnectException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,26 +37,28 @@ public class Message {
 		}
 	}
 	
-	private static void connectToServer(){
+	private static void connectToServer() throws UnknownHostException, IOException{
 		//System.out.println("000");
-		try{
+
 			client = new Socket(host, 12344);
 			//System.out.println("111");
 			output = new ObjectOutputStream(client.getOutputStream());
 			//System.out.println("222");
 			input = new ObjectInputStream(client.getInputStream());
 			//System.out.println("333");
-			
-		}catch (IOException e){
-			e.printStackTrace();
-		}
 	}
 	
 	public static Map<String, Object> login(Map<String, Object> userInfo){
-		connectToServer();
-		userInfo.put("port", port);
+		Map<String, Object> responseMessage = new HashMap<String, Object>();
+		try {
+			connectToServer();
+			userInfo.put("port", port);
+			responseMessage = sendData(userInfo);
+		}catch (IOException e0){
+			responseMessage.put("messageCode", Code.FIAL_TO_CONNECT);
+		}
 		
-		return sendData(userInfo);
+		return responseMessage;
 
 	}
 	
@@ -76,6 +80,7 @@ public class Message {
 	}
 	
 	public static Map<String, Object> addFriend(Map<String, Object> info){
+
 		return sendData(info);
 	}
 	
@@ -91,13 +96,14 @@ public class Message {
 			responseMessage = (Map<String, Object>) input.readObject();
 			System.out.println("789");
 			return responseMessage;
-		}catch (IOException e){
+		}catch (SocketException e0){
+			responseMessage.put("messageCode", Code.FIAL_TO_CONNECT);
+		}catch (IOException | ClassNotFoundException e){
 			e.printStackTrace();
 			responseMessage.put("messageCode", Code.UNKNOW_ERROR);
-		}finally {
-			return responseMessage;
 		}
-
+		
+		return responseMessage;
 	}
 	
 	public static void sendPacket(Map<String, Object> message){

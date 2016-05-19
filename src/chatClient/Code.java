@@ -10,4 +10,5 @@ public class Code {
 	public static final int SQL_EXCEPTION = 406;
 	public static final int DUP_USERNAME = 407;
 	public static final int UNKNOW_ERROR = 408;
+	public static final int FIAL_TO_CONNECT = 409;
 }

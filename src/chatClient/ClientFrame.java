@@ -132,6 +132,9 @@ public class ClientFrame extends JFrame implements Runnable{
 				case Code.SQL_EXCEPTION:
 					JOptionPane.showMessageDialog(ClientFrame.this, "数据库错误！");
 					return;
+				case Code.FIAL_TO_CONNECT:
+					JOptionPane.showMessageDialog(ClientFrame.this, "与服务器连接失败！");
+					return;
 				case Code.SUCCESS:
 					JOptionPane.showMessageDialog(ClientFrame.this, "添加好友成功！");
 					addFriendText.setText("");
@@ -223,7 +226,8 @@ public class ClientFrame extends JFrame implements Runnable{
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
 				int id = nameToID.get(chatToName);
-				((ChatLog) chatToList.get(id)).openChatFrame();
+				if (!((ChatLog) chatToList.get(id)).isChatFrameOpen())
+					((ChatLog) chatToList.get(id)).openChatFrame();
 			}
 		});
 	}
@@ -293,6 +297,7 @@ public class ClientFrame extends JFrame implements Runnable{
 			if (chatLog.isChatFrameOpen()){
 				System.out.println("2.!#23213");
 				chatLog.getChatFrame().displayMessage(message);
+				chatLog.getChatFrame().toFront();
 			}
 			else {
 				addNewNotice(chatToUsername);
