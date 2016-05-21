@@ -23,7 +23,7 @@ public class Message {
 	
 	private static DatagramSocket socket;
 	private static Socket client;
-	private static String host = "172.20.84.173";
+	private static String host = "127.0.0.1";
 	private static int port;
 	private static ObjectInputStream input;
 	private static ObjectOutputStream output;
@@ -40,7 +40,7 @@ public class Message {
 	private static void connectToServer() throws UnknownHostException, IOException{
 		//System.out.println("000");
 
-			client = new Socket(host, 12344);
+			client = new Socket(host, 54322);
 			//System.out.println("111");
 			output = new ObjectOutputStream(client.getOutputStream());
 			//System.out.println("222");

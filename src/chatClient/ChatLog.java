@@ -60,9 +60,7 @@ public class ChatLog {
 		chatFrame = new ChatFrame();
 		isChatFrameOpen = true;
 		
-		//System.out.println("4.!#23213    " + chatLog.size());
 		for (int i = 0, size = chatLog.size(); i < size; ++i){
-			//System.out.println("5.!#23213    " + chatLog.size());
 			chatFrame.displayMessage(chatLog.poll());
 		}
 	}

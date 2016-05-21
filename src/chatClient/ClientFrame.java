@@ -278,30 +278,28 @@ public class ClientFrame extends JFrame implements Runnable{
 	
 	public void run(){
 		while (true){
-			System.out.println("1.!#23213");
+			//System.out.println("1.!#23213");
 			message = Message.receivePacket();
 			int chatToID = (Integer) message.get("fromID");
 			String chatToUsername = (String) message.get("fromName");
-			System.out.println(chatToID);
-			System.out.println(chatToUsername);
+			//System.out.println(chatToID);
+			//System.out.println(chatToUsername);
 			if (chatToList.get(chatToID) == null){
-				System.out.println("0.!#23213");
-				
+				//System.out.println("0.!#23213");
 				insertNewChat(stranger, chatToUsername, chatToID);
 				
-				System.out.println(chatToList);				
-
+				//System.out.println(chatToList);				
 			}
 			
 			ChatLog chatLog = (ChatLog) chatToList.get(chatToID);
 			if (chatLog.isChatFrameOpen()){
-				System.out.println("2.!#23213");
+				//System.out.println("2.!#23213");
 				chatLog.getChatFrame().displayMessage(message);
-				chatLog.getChatFrame().toFront();
+				chatLog.getChatFrame().requestFocus();
 			}
 			else {
 				addNewNotice(chatToUsername);
-				System.out.println("3.!#23213");
+				//System.out.println("3.!#23213");
 				chatLog.addUnreadMessage(message);
 			}
 		}
